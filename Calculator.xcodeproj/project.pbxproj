@@ -83,9 +83,9 @@
 				33167D6D15B0923200D45235 /* MainStoryboard.storyboard */,
 				33167D7015B0923200D45235 /* CalculatorViewController.h */,
 				33167D7115B0923200D45235 /* CalculatorViewController.m */,
-				33167D6215B0923200D45235 /* Supporting Files */,
 				33167D7B15B0937300D45235 /* CalculatorBrain.h */,
 				33167D7C15B0937300D45235 /* CalculatorBrain.m */,
+				33167D6215B0923200D45235 /* Supporting Files */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
