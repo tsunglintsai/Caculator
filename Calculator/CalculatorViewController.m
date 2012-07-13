@@ -12,9 +12,9 @@
 @interface CalculatorViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
 @property (weak, nonatomic) IBOutlet UILabel *display;
+@property (weak, nonatomic) IBOutlet UILabel *variablesLabel;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringANumber;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringAVariable;
-@property (weak, nonatomic) IBOutlet UILabel *variablesLabel;
 @property (strong, nonatomic) CalculatorBrain *brain;
 @property (strong, nonatomic) NSDictionary *testVariableValues;
 @end
