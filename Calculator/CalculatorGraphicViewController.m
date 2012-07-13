@@ -15,4 +15,30 @@
 @implementation CalculatorGraphicViewController
 @synthesize brain = _brain;
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+#pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+#pragma mark - ┃ Gesture Recognizer     {  ┃
+#pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.view action:@selector(panGestureFired:)];
+    [panGesture setMinimumNumberOfTouches:1];
+    [panGesture setMaximumNumberOfTouches:1];
+    [self.view addGestureRecognizer:panGesture];   
+    
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self.view action:@selector(pinchGestureFired:)];
+    [self.view addGestureRecognizer:pinchGesture];  
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGestureFired:)];    
+    [tapGesture setNumberOfTapsRequired:3];
+    [tapGesture setNumberOfTouchesRequired:1];  
+    [self.view addGestureRecognizer:tapGesture];
+    
+#pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+#pragma mark - ┃ Gesture Recognizer     {  ┃
+#pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+
+    
+}
 @end
