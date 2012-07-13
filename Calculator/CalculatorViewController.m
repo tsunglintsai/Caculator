@@ -12,7 +12,6 @@
 @interface CalculatorViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
 @property (weak, nonatomic) IBOutlet UILabel *display;
-@property (weak, nonatomic) IBOutlet UILabel *variablesLabel;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringANumber;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringAVariable;
 @property (strong, nonatomic) CalculatorBrain *brain;
@@ -25,7 +24,6 @@
 @synthesize display = _display;
 @synthesize userIsIntTheMiddleOfEnteringANumber = _userIsIntTheMiddleOfEnteringANumber;
 @synthesize userIsIntTheMiddleOfEnteringAVariable = _userIsIntTheMiddleOfEnteringAVariable;
-@synthesize variablesLabel = _variablesLabel;
 @synthesize brain = _brain;
 @synthesize testVariableValues = _testVariableValues;
 
@@ -66,7 +64,6 @@
 - (IBAction)clearEverthingButtonClicked:(id)sender {
     self.thingsSendToBrainLabel.text = @"";
     self.display.text = @"0";
-    self.variablesLabel.text = @"";
     [self.brain clearStack];
     self.testVariableValues = nil; 
     self.userIsIntTheMiddleOfEnteringANumber = NO;    
@@ -110,38 +107,6 @@
     }
 }
 
-- (IBAction)testButtonClicked:(UIButton *)sender {
-    if([sender.currentTitle isEqualToString:@"Test 1"]){
-        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithInt:1], @"a", 
-                                   [NSNumber numberWithInt:2], @"b",
-                                   [NSNumber numberWithInt:3], @"x",
-                                   nil];
-    }else if([sender.currentTitle isEqualToString:@"Test 2"]){
-        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithDouble:1.2], @"a", 
-                                   [NSNumber numberWithDouble:2.2], @"b",
-                                   [NSNumber numberWithInt:0], @"x",
-                                   nil];
-    }else if([sender.currentTitle isEqualToString:@"Test 3"]){
-        self.testVariableValues = nil;
-    }
-    self.display.text = [NSString stringWithFormat:@"%g",[CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues]];
-    [self updateVariablesLabel];
-}
-
-- (void) updateVariablesLabel{
-    self.variablesLabel.text = @"";
-    if(self.testVariableValues==nil || [CalculatorBrain variablesUsedInProgram:self.brain.program] == nil){
-        self.variablesLabel.text = @"";
-    }else{
-        for (id object in [CalculatorBrain variablesUsedInProgram:self.brain.program]) {
-            NSString *key = object;
-            NSString *value = [[self.testVariableValues valueForKey:key] description];
-            self.variablesLabel.text = [self.variablesLabel.text stringByAppendingString:[NSString stringWithFormat:@"%@=%@ ",key,value]];
-        }
-    }
-}
 
 - (IBAction)operationPressed:(UIButton *)sender {
     if(self.userIsIntTheMiddleOfEnteringANumber || self.userIsIntTheMiddleOfEnteringAVariable) {
@@ -151,12 +116,10 @@
     NSString *resultString = [NSString stringWithFormat:@"%g",result];
     self.display.text = resultString;
     self.thingsSendToBrainLabel.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
-    [self updateVariablesLabel];
 }
 
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
-    [self setVariablesLabel:nil];
     [super viewDidUnload];
 }
 
