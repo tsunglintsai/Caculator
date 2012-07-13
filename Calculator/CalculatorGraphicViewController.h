@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CalculatorBrain.h"
 
 @interface CalculatorGraphicViewController : UIViewController
+@property (weak, nonatomic) CalculatorBrain *brain;
 
 @end

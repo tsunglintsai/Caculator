@@ -8,6 +8,7 @@
 
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
+#import "CalculatorGraphicViewController.h"
 
 @interface CalculatorViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
@@ -118,11 +119,16 @@
     self.thingsSendToBrainLabel.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"graphicView4Segues"]) {
+        CalculatorGraphicViewController *graphicViewController = segue.destinationViewController;
+        graphicViewController.brain = self.brain;
+    }
 }
+
+
+
 
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
