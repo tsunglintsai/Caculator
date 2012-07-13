@@ -374,6 +374,21 @@
                                     <action selector="undoButtonClicked:" destination="2" eventType="touchUpInside" id="d81-92-eAc"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LcU-7L-mze">
+                                <rect key="frame" x="93" y="333" width="110" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Graphic">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="LdA-qs-GY6" kind="push" id="xjX-re-8Dy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -384,7 +399,22 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="362" y="22"/>
+            <point key="canvasLocation" x="176" y="27"/>
+        </scene>
+        <!--Calculator Graphic View Controller-->
+        <scene sceneID="rFH-Eg-9vm">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XMR-vu-dvx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="LdA-qs-GY6" customClass="CalculatorGraphicViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vdk-V7-Gzc">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="blX-3F-19C"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="559" y="18"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5Wi-Gi-p9S">
@@ -402,9 +432,21 @@
                     </connections>
                 </navigationController>
             </objects>
-            <point key="canvasLocation" x="-164" y="22"/>
+            <point key="canvasLocation" x="-246" y="27"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="CalculatorGraphicViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorGraphicViewController.h"/>
+        </class>
+        <class className="CalculatorViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="display" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="thingsSendToBrainLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

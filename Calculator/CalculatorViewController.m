@@ -118,6 +118,12 @@
     self.thingsSendToBrainLabel.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
+}
+
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
     [super viewDidUnload];
