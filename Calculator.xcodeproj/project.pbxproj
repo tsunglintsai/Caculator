@@ -101,8 +101,8 @@
 				3338926715B0C497003AC958 /* CalculatorGraphicView.m */,
 				33167D7B15B0937300D45235 /* CalculatorBrain.h */,
 				33167D7C15B0937300D45235 /* CalculatorBrain.m */,
-				3338926C15B0CD7E003AC958 /* AxesDrawer.m */,
 				3338926D15B0CD7E003AC958 /* AxesDrawer.h */,
+				3338926C15B0CD7E003AC958 /* AxesDrawer.m */,
 				33167D6215B0923200D45235 /* Supporting Files */,
 			);
 			path = Calculator;

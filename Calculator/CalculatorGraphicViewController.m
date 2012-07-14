@@ -8,12 +8,34 @@
 
 #import "CalculatorGraphicViewController.h"
 
-@interface CalculatorGraphicViewController ()
-
+@interface CalculatorGraphicViewController ()<CalculatorGraphicViewDelegate>
+@property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
 @end
 
 @implementation CalculatorGraphicViewController
-@synthesize brain = _brain;
+@synthesize calculatorGraphicView = _calculatorGraphicView;
+@synthesize graphic = _graphic;
+@synthesize delegate = _delegate;
+
+- (NSDictionary*) graphic{
+    if(_graphic == nil){
+        _graphic = [[NSMutableDictionary alloc]init];
+    }
+    return _graphic;
+}
+
+- (CGFloat) getYwithX:(CGFloat)x{
+    CGFloat result = 0;
+    NSString *xString = [NSNumber numberWithFloat:x].description;
+    if([self.graphic objectForKey:xString]==nil){
+        NSNumber *y = [NSNumber numberWithFloat:[self.delegate getYwithX:x]];
+        [self.graphic setValue:y forKey:xString];
+    }
+    if([[self.graphic objectForKey:xString] isKindOfClass:[NSNumber class]]){
+        result = ((NSNumber*)[self.graphic objectForKey:xString]).floatValue;
+    }
+    return result;
+}
 
 - (void)viewDidLoad
 {
@@ -22,23 +44,22 @@
 #pragma mark - ┃ Gesture Recognizer     {  ┃
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.view action:@selector(panGestureFired:)];
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.calculatorGraphicView action:@selector(panGestureFired:)];
     [panGesture setMinimumNumberOfTouches:1];
     [panGesture setMaximumNumberOfTouches:1];
-    [self.view addGestureRecognizer:panGesture];   
+    [self.calculatorGraphicView addGestureRecognizer:panGesture];   
     
-    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self.view action:@selector(pinchGestureFired:)];
-    [self.view addGestureRecognizer:pinchGesture];  
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self.calculatorGraphicView action:@selector(pinchGestureFired:)];
+    [self.calculatorGraphicView addGestureRecognizer:pinchGesture];  
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGestureFired:)];    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.calculatorGraphicView action:@selector(tapGestureFired:)];    
     [tapGesture setNumberOfTapsRequired:3];
     [tapGesture setNumberOfTouchesRequired:1];  
-    [self.view addGestureRecognizer:tapGesture];
+    [self.calculatorGraphicView addGestureRecognizer:tapGesture];
     
 #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
 #pragma mark - ┃ Gesture Recognizer     {  ┃
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
-
-    
+    self.calculatorGraphicView.delegate = self;
 }
 @end

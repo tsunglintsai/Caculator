@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CalculatorGraphicViewDelegate
+- (CGFloat) getYwithX:(CGFloat)x;
+@end
+
 @interface CalculatorGraphicView : UIView
+@property (weak,nonatomic) id delegate;  
 
 @end

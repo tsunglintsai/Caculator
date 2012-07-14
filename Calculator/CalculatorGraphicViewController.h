@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "CalculatorBrain.h"
+#import "CalculatorGraphicView.h"
+
+@protocol CalculatorGraphicViewDelegateDelegate
+- (CGFloat) getYwithX:(CGFloat)x;
+@end
 
 @interface CalculatorGraphicViewController : UIViewController
-@property (weak, nonatomic) CalculatorBrain *brain;
+@property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
+@property (weak,nonatomic) id delegate;  
 
 @end

@@ -126,19 +126,19 @@
 - (void)pushOperand:(double)operand
 {
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
-    NSLog(@"%@",[self.program description]);    
+    //NSLog(@"%@",[self.program description]);    
 }
 
 - (void)pushVariable:(NSString*)variable
 {
     [self.programStack addObject:variable];
-    NSLog(@"%@",[self.program description]);    
+    //NSLog(@"%@",[self.program description]);    
 }
 
 - (double)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
-    NSLog(@"%@",[self.program description]);    
+    //NSLog(@"%@",[self.program description]);    
     return [[self class] runProgram:self.program];
 }
 
@@ -206,7 +206,7 @@
             }
         }
         // then run program
-        NSLog(@"running program:%@",[programArray description]);    
+        //NSLog(@"running program:%@",[programArray description]);    
         
         result = [self runProgram:programArray];
     }

@@ -406,12 +406,22 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XMR-vu-dvx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="LdA-qs-GY6" customClass="CalculatorGraphicViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="vdk-V7-Gzc" customClass="CalculatorGraphicView">
+                    <view key="view" contentMode="scaleToFill" id="vdk-V7-Gzc">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="Szo-po-c42" customClass="CalculatorGraphicView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="blX-3F-19C"/>
+                    <connections>
+                        <outlet property="calculatorGraphicView" destination="Szo-po-c42" id="2X3-If-hqK"/>
+                    </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="559" y="18"/>
@@ -441,6 +451,9 @@
         </class>
         <class className="CalculatorGraphicViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorGraphicViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="calculatorGraphicView" candidateClass="CalculatorGraphicView"/>
+            </relationships>
         </class>
         <class className="CalculatorViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorViewController.h"/>

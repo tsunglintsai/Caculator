@@ -10,7 +10,7 @@
 #import "CalculatorBrain.h"
 #import "CalculatorGraphicViewController.h"
 
-@interface CalculatorViewController ()
+@interface CalculatorViewController ()<CalculatorGraphicViewDelegateDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
 @property (weak, nonatomic) IBOutlet UILabel *display;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringANumber;
@@ -123,14 +123,19 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"graphicView4Segues"]) {
         CalculatorGraphicViewController *graphicViewController = segue.destinationViewController;
-        graphicViewController.brain = self.brain;
+        graphicViewController.delegate = self;
     }
+}
+
+- (CGFloat) getYwithX:(CGFloat)x{
+    NSDictionary *variableMappings = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:x] forKey:@"x"];
+    double result = [[self.brain class] runProgram:self.brain.program usingVariableValues:variableMappings];
+    return result;
 }
 
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
     [super viewDidUnload];
 }
-
 
 @end
