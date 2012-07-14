@@ -45,6 +45,7 @@
 		3338926715B0C497003AC958 /* CalculatorGraphicView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorGraphicView.m; sourceTree = "<group>"; };
 		3338926C15B0CD7E003AC958 /* AxesDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AxesDrawer.m; sourceTree = "<group>"; };
 		3338926D15B0CD7E003AC958 /* AxesDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AxesDrawer.h; sourceTree = "<group>"; };
+		BA6297B315B1C59700DBBD8F /* SplitViewBarButtonItemPresenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplitViewBarButtonItemPresenter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +94,7 @@
 			children = (
 				33167D6D15B0923200D45235 /* MainStoryboard_iPhone.storyboard */,
 				3338925715B0978C003AC958 /* MainStoryboard_iPas.storyboard */,
+				BA6297B315B1C59700DBBD8F /* SplitViewBarButtonItemPresenter.h */,
 				33167D7015B0923200D45235 /* CalculatorViewController.h */,
 				33167D7115B0923200D45235 /* CalculatorViewController.m */,
 				3338925F15B09EED003AC958 /* CalculatorGraphicViewController.h */,

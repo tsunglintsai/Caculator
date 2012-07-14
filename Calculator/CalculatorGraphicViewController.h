@@ -15,7 +15,6 @@
 @end
 
 @interface CalculatorGraphicViewController : UIViewController
-@property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
 @property (strong, nonatomic) NSString *programString;
 @property (weak,nonatomic) id delegate;
 

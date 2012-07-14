@@ -9,6 +9,7 @@
 #import "CalculatorGraphicViewController.h"
 
 @interface CalculatorGraphicViewController ()<CalculatorGraphicViewDelegate>
+@property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
 @property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
 @property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
 @end
@@ -19,6 +20,13 @@
 @synthesize delegate = _delegate;
 @synthesize programDescriptionLabel = _programDescriptionLabel;
 @synthesize programString = _programString;
+
+- (void) setProgramString:(NSString *)programString{
+    _programString = programString;
+    self.programDescriptionLabel.text = _programString;
+    [self.graphic removeAllObjects];
+    [self.calculatorGraphicView setNeedsDisplay];
+}
 
 - (NSDictionary*) graphic{
     if(_graphic == nil){
@@ -65,7 +73,6 @@
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.delegate = self;
     self.programDescriptionLabel.text = self.programString;
-    
 }
 - (void)viewDidUnload {
     [self setProgramDescriptionLabel:nil];
