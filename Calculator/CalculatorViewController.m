@@ -119,11 +119,12 @@
     self.thingsSendToBrainLabel.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"graphicView4Segues"]) {
         CalculatorGraphicViewController *graphicViewController = segue.destinationViewController;
         graphicViewController.delegate = self;
+        graphicViewController.programString = [CalculatorBrain descriptionOfProgram:self.brain.program];
+        NSLog(@"%@",graphicViewController.programString);
     }
 }
 

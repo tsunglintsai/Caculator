@@ -413,6 +413,16 @@
                             <view contentMode="scaleToFill" id="Szo-po-c42" customClass="CalculatorGraphicView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Program Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="Jk5-Gw-WTW">
+                                        <rect key="frame" x="11" y="20" width="299" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.84498131789999997" green="0.84498131789999997" blue="0.84498131789999997" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -421,6 +431,7 @@
                     <navigationItem key="navigationItem" id="blX-3F-19C"/>
                     <connections>
                         <outlet property="calculatorGraphicView" destination="Szo-po-c42" id="2X3-If-hqK"/>
+                        <outlet property="programDescriptionLabel" destination="Jk5-Gw-WTW" id="AuL-1f-su0"/>
                     </connections>
                 </viewController>
             </objects>
@@ -453,6 +464,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorGraphicViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="calculatorGraphicView" candidateClass="CalculatorGraphicView"/>
+                <relationship kind="outlet" name="programDescriptionLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="CalculatorViewController" superclassName="UIViewController">

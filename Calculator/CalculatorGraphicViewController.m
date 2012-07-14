@@ -10,12 +10,15 @@
 
 @interface CalculatorGraphicViewController ()<CalculatorGraphicViewDelegate>
 @property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
+@property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
 @end
 
 @implementation CalculatorGraphicViewController
 @synthesize calculatorGraphicView = _calculatorGraphicView;
 @synthesize graphic = _graphic;
 @synthesize delegate = _delegate;
+@synthesize programDescriptionLabel = _programDescriptionLabel;
+@synthesize programString = _programString;
 
 - (NSDictionary*) graphic{
     if(_graphic == nil){
@@ -61,5 +64,11 @@
 #pragma mark - ┃ Gesture Recognizer     {  ┃
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.delegate = self;
+    self.programDescriptionLabel.text = self.programString;
+    
+}
+- (void)viewDidUnload {
+    [self setProgramDescriptionLabel:nil];
+    [super viewDidUnload];
 }
 @end
