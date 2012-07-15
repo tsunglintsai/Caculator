@@ -15,6 +15,7 @@
 @end
 
 @interface CalculatorGraphicViewController : UIViewController
+
 @property (strong, nonatomic) NSString *programString;
 @property (weak,nonatomic) id delegate;
 

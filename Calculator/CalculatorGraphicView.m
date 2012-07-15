@@ -63,7 +63,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 - (void) setScale:(NSNumber *)scale{
     _scale = scale;
     [self.userDefaults setValue:_scale forKey:UserDefaultKeyStringScale];
-    [self.userDefaults synchronize];
+    //[self.userDefaults synchronize];
 }
 
 - (NSValue*)origin{
@@ -85,7 +85,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
     _origin = origin;
     [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.x] forKey:UserDefaultKeyStringOriginX];
     [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.y] forKey:UserDefaultKeyStringOriginY];    
-    [self.userDefaults synchronize];    
+    //[self.userDefaults synchronize];    
 }
 
 - (void)panGestureFired:(UIPanGestureRecognizer *)recognizer
@@ -133,20 +133,6 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 }
 
 - (void) drawPath:(CGContextRef)ctxt
-        fromPoint:(CGPoint)startPoint
-          toPoint:(CGPoint)endPOint
-{
-    UIGraphicsPushContext(ctxt);
-    CGContextBeginPath(ctxt);
-    CGContextMoveToPoint(ctxt, startPoint.x, startPoint.y);
-    CGContextAddLineToPoint(ctxt,endPOint.x, endPOint.y);
-    CGContextClosePath(ctxt);
-    [[UIColor redColor]setStroke];
-    CGContextDrawPath(ctxt, kCGPathEOFillStroke);
-    UIGraphicsPopContext();    
-}
-
-- (void) drawPath:(CGContextRef)ctxt
        withPoints:(NSArray*)pointArray
 {
     UIGraphicsPushContext(ctxt);
@@ -171,15 +157,18 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
+    
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
     for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+1){
         CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
-        CGFloat y = [self.delegate getYwithX:x];		
+        CGFloat y = [self.delegate getYwithX:x];	
         CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
         [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
-    }
+    }     
     [self drawPath:context withPoints:pointList];
+    
 }
+
 
 
 @end

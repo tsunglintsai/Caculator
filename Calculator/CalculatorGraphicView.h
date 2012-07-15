@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SplitViewBarButtonItemPresenter.h"
 
-@protocol CalculatorGraphicViewDelegate
+@protocol CalculatorGraphicViewDelegate<SplitViewBarButtonItemPresenter>
 - (CGFloat) getYwithX:(CGFloat)x;
 @end
 

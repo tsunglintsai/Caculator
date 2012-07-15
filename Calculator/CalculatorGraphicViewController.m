@@ -12,6 +12,8 @@
 @property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
 @property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
 @property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
+
 @end
 
 @implementation CalculatorGraphicViewController
@@ -19,7 +21,20 @@
 @synthesize graphic = _graphic;
 @synthesize delegate = _delegate;
 @synthesize programDescriptionLabel = _programDescriptionLabel;
+@synthesize toolBar = _toolBar;
 @synthesize programString = _programString;
+@synthesize splitViewBarButtonItem = _splitViewBarButtonItem;
+
+- (void)setSplitViewBarButtonItem:(UIBarButtonItem *)splitViewBarButtonItem
+{
+    if (splitViewBarButtonItem != _splitViewBarButtonItem) {
+        NSMutableArray *toolbarItems = [self.toolBar.items mutableCopy];
+        if (_splitViewBarButtonItem) [toolbarItems removeObject:_splitViewBarButtonItem];
+        if (splitViewBarButtonItem) [toolbarItems insertObject:splitViewBarButtonItem atIndex:0];
+        self.toolBar.items = toolbarItems;
+        _splitViewBarButtonItem = splitViewBarButtonItem;
+    }
+}
 
 - (void) setProgramString:(NSString *)programString
 {
@@ -40,7 +55,7 @@
 - (CGFloat) getYwithX:(CGFloat)x
 {
     CGFloat result = 0;
-    NSString *xString = [NSNumber numberWithFloat:x].description;
+    NSString *xString = [NSString stringWithFormat:@"%g",x];
     if([self.graphic objectForKey:xString]==nil){
         NSNumber *y = [NSNumber numberWithFloat:[self.delegate getYwithX:x]];
         [self.graphic setValue:y forKey:xString];
@@ -78,9 +93,15 @@
     self.programDescriptionLabel.text = self.programString;
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return YES;
+}
+
 - (void)viewDidUnload 
 {
     [self setProgramDescriptionLabel:nil];
+    [self setToolBar:nil];
     [super viewDidUnload];
 }
 @end

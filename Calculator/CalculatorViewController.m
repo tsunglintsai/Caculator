@@ -9,7 +9,6 @@
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
 #import "CalculatorGraphicViewController.h"
-#import "SplitViewBarButtonItemPresenter.h"
 
 @interface CalculatorViewController ()<CalculatorGraphicViewDelegateDelegate,UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
@@ -21,7 +20,6 @@
 @end
 
 @implementation CalculatorViewController
-
 @synthesize thingsSendToBrainLabel = _thingsSendToBrainLabel;
 @synthesize display = _display;
 @synthesize userIsIntTheMiddleOfEnteringANumber = _userIsIntTheMiddleOfEnteringANumber;
@@ -185,7 +183,6 @@
 }
 
 - (void)showAndSetGraphic{
-    NSLog(@"%@",self.calculatorGraphicViewController);
     self.calculatorGraphicViewController.programString = [CalculatorBrain descriptionOfProgram:self.brain.program];
     self.calculatorGraphicViewController.delegate = self;
 }
@@ -196,6 +193,7 @@
 #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
 #pragma mark - ┃ SplitView              }  ┃
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+
 
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
