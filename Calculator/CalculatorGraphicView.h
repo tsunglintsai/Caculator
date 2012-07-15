@@ -14,5 +14,7 @@
 
 @interface CalculatorGraphicView : UIView
 @property (weak,nonatomic) id delegate;  
+@property(nonatomic) NSValue *origin;
+@property(nonatomic) NSNumber *scale;
 
 @end

@@ -10,22 +10,27 @@
 #import "AxesDrawer.h"
 
 @interface CalculatorGraphicView()
-@property(nonatomic) CGFloat scale;
 @property(nonatomic,strong) AxesDrawer *axesDrawer;
-@property(nonatomic) CGFloat previousRotation;
 @property(nonatomic) CGFloat previousScale;
-@property(nonatomic) CGPoint origin;
+@property(nonatomic,strong) NSUserDefaults *userDefaults;
 
 @end
+
 @implementation CalculatorGraphicView
 @synthesize scale = _scale;
 @synthesize axesDrawer = _axesDrawer;
-@synthesize previousRotation = _previousRotation;
 @synthesize previousScale = _previousScale;
 @synthesize origin = _origin;
 @synthesize delegate = _delegate;
+@synthesize userDefaults = _userDefaults;
 
-- (AxesDrawer*)axesDrawer{
+NSString * const UserDefaultKeyStringScale = @"SCALE";
+NSString * const UserDefaultKeyStringOriginX = @"ORIGIN.X";
+NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
+
+
+- (AxesDrawer*)axesDrawer
+{
     if(_axesDrawer==nil){
         _axesDrawer = [[AxesDrawer alloc]init];
     }
@@ -34,9 +39,53 @@
 
 - (void)setup 
 { 
-    self.origin = CGPointMake(self.bounds.origin.x+self.bounds.size.width/2, self.bounds.origin.y+self.bounds.size.height/2);
-    self.scale = 1;
-    self.previousScale = 1.0;
+    
+}
+
+- (NSUserDefaults*) userDefaults{
+    if(_userDefaults == nil){
+        _userDefaults = [NSUserDefaults standardUserDefaults];
+    }
+    return _userDefaults;
+}
+
+- (NSNumber*)scale{
+    if(_scale==nil){
+        _scale = [self.userDefaults objectForKey:UserDefaultKeyStringScale];
+        if(_scale == nil){
+            _scale = [NSNumber numberWithFloat:1.0];            
+        }
+        self.previousScale = _scale.floatValue;
+    }
+    return _scale;
+}
+
+- (void) setScale:(NSNumber *)scale{
+    _scale = scale;
+    [self.userDefaults setValue:_scale forKey:UserDefaultKeyStringScale];
+    [self.userDefaults synchronize];
+}
+
+- (NSValue*)origin{
+    if(_origin==nil){
+        NSNumber *originalXinUserDefault = [self.userDefaults objectForKey:UserDefaultKeyStringOriginX];
+        NSNumber *originalYinUserDefault = [self.userDefaults objectForKey:UserDefaultKeyStringOriginY];
+        if(originalXinUserDefault != nil && originalYinUserDefault != nil){
+            _origin = [NSValue valueWithCGPoint:CGPointMake(originalXinUserDefault.floatValue, originalYinUserDefault.floatValue)];
+        }
+        if(_origin == nil){
+            _origin = 
+            [NSValue valueWithCGPoint:CGPointMake(self.bounds.origin.x+self.bounds.size.width/2, self.bounds.origin.y+self.bounds.size.height/2)];    
+        }
+    }
+    return _origin;
+}
+
+- (void) setOrigin:(NSValue *)origin{
+    _origin = origin;
+    [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.x] forKey:UserDefaultKeyStringOriginX];
+    [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.y] forKey:UserDefaultKeyStringOriginY];    
+    [self.userDefaults synchronize];    
 }
 
 - (void)panGestureFired:(UIPanGestureRecognizer *)recognizer
@@ -45,7 +94,7 @@
         (recognizer.state == UIGestureRecognizerStateEnded)) 
     {
         CGPoint translation = [recognizer translationInView:self];
-        self.origin = CGPointMake(self.origin.x+translation.x, self.origin.y+translation.y);
+        self.origin = [NSValue valueWithCGPoint: CGPointMake(self.origin.CGPointValue.x+translation.x, self.origin.CGPointValue.y+translation.y)];
         [recognizer setTranslation:CGPointZero inView:self];
         [self setNeedsDisplay];
 
@@ -55,16 +104,17 @@
 - (void)pinchGestureFired:(UIPinchGestureRecognizer *)recognizer
 {
     if([recognizer state] == UIGestureRecognizerStateEnded) {
-        self.previousScale = self.scale;
+        self.previousScale = self.scale.floatValue;
         return;
     }
-    self.scale = (self.previousScale * [recognizer scale]);
+    self.scale = [NSNumber numberWithFloat:(self.previousScale * [recognizer scale])];
     [self setNeedsDisplay];
 }
 
-- (void)tapGestureFired:(UITapGestureRecognizer *)recognizer{
+- (void)tapGestureFired:(UITapGestureRecognizer *)recognizer
+{
     CGPoint translation = [recognizer locationInView:self];
-    self.origin = translation;
+    self.origin = [NSValue valueWithCGPoint: translation];
     [self setNeedsDisplay];
 }
 
@@ -82,9 +132,10 @@
     return self;
 }
 
--(void) drawPath:(CGContextRef)ctxt
+- (void) drawPath:(CGContextRef)ctxt
         fromPoint:(CGPoint)startPoint
-          toPoint:(CGPoint)endPOint{
+          toPoint:(CGPoint)endPOint
+{
     UIGraphicsPushContext(ctxt);
     CGContextBeginPath(ctxt);
     CGContextMoveToPoint(ctxt, startPoint.x, startPoint.y);
@@ -95,8 +146,9 @@
     UIGraphicsPopContext();    
 }
 
--(void) drawPath:(CGContextRef)ctxt
-      withPoints:(NSArray*)pointArray{
+- (void) drawPath:(CGContextRef)ctxt
+       withPoints:(NSArray*)pointArray
+{
     UIGraphicsPushContext(ctxt);
     CGContextBeginPath(ctxt);
     [pointArray enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
@@ -115,17 +167,15 @@
     UIGraphicsPopContext();    
 }
 
-
-
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin scale:self.scale];
+    [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
     for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+1){
-        CGFloat x= (i - self.origin.x)/self.scale;
+        CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
         CGFloat y = [self.delegate getYwithX:x];		
-        CGPoint coordinatePostion = CGPointMake(i,self.origin.y-y*self.scale);
+        CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
         [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
     }
     [self drawPath:context withPoints:pointList];

@@ -21,21 +21,24 @@
 @synthesize programDescriptionLabel = _programDescriptionLabel;
 @synthesize programString = _programString;
 
-- (void) setProgramString:(NSString *)programString{
+- (void) setProgramString:(NSString *)programString
+{
     _programString = programString;
     self.programDescriptionLabel.text = _programString;
     [self.graphic removeAllObjects];
     [self.calculatorGraphicView setNeedsDisplay];
 }
 
-- (NSDictionary*) graphic{
+- (NSDictionary*) graphic
+{
     if(_graphic == nil){
         _graphic = [[NSMutableDictionary alloc]init];
     }
     return _graphic;
 }
 
-- (CGFloat) getYwithX:(CGFloat)x{
+- (CGFloat) getYwithX:(CGFloat)x
+{
     CGFloat result = 0;
     NSString *xString = [NSNumber numberWithFloat:x].description;
     if([self.graphic objectForKey:xString]==nil){
@@ -51,9 +54,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-#pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-#pragma mark - ┃ Gesture Recognizer     {  ┃
-#pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+    #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+    #pragma mark - ┃ Gesture Recognizer     {  ┃
+    #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.calculatorGraphicView action:@selector(panGestureFired:)];
     [panGesture setMinimumNumberOfTouches:1];
@@ -68,13 +71,15 @@
     [tapGesture setNumberOfTouchesRequired:1];  
     [self.calculatorGraphicView addGestureRecognizer:tapGesture];
     
-#pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
-#pragma mark - ┃ Gesture Recognizer     {  ┃
-#pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
+    #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
+    #pragma mark - ┃ Gesture Recognizer     {  ┃
+    #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.delegate = self;
     self.programDescriptionLabel.text = self.programString;
 }
-- (void)viewDidUnload {
+
+- (void)viewDidUnload 
+{
     [self setProgramDescriptionLabel:nil];
     [super viewDidUnload];
 }
