@@ -69,6 +69,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.calculatorGraphicView.contentScaleFactor = 2;
     #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
     #pragma mark - ┃ Gesture Recognizer     {  ┃
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
@@ -91,6 +92,7 @@
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.delegate = self;
     self.programDescriptionLabel.text = self.programString;
+    self.calculatorGraphicView.contentMode = UIViewContentModeRedraw; // make sure content redraw when orientation change, or it would just scale to new size
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

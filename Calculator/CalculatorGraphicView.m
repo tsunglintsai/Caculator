@@ -63,7 +63,8 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 - (void) setScale:(NSNumber *)scale{
     _scale = scale;
     [self.userDefaults setValue:_scale forKey:UserDefaultKeyStringScale];
-    //[self.userDefaults synchronize];
+    [self.userDefaults synchronize];
+    [self setNeedsDisplay];
 }
 
 - (NSValue*)origin{
@@ -85,7 +86,8 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
     _origin = origin;
     [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.x] forKey:UserDefaultKeyStringOriginX];
     [self.userDefaults setValue:[NSNumber numberWithFloat:_origin.CGPointValue.y] forKey:UserDefaultKeyStringOriginY];    
-    //[self.userDefaults synchronize];    
+    [self.userDefaults synchronize];    
+    [self setNeedsDisplay];
 }
 
 - (void)panGestureFired:(UIPanGestureRecognizer *)recognizer
@@ -96,7 +98,6 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         CGPoint translation = [recognizer translationInView:self];
         self.origin = [NSValue valueWithCGPoint: CGPointMake(self.origin.CGPointValue.x+translation.x, self.origin.CGPointValue.y+translation.y)];
         [recognizer setTranslation:CGPointZero inView:self];
-        [self setNeedsDisplay];
 
     }
 }
@@ -108,14 +109,12 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         return;
     }
     self.scale = [NSNumber numberWithFloat:(self.previousScale * [recognizer scale])];
-    [self setNeedsDisplay];
 }
 
 - (void)tapGestureFired:(UITapGestureRecognizer *)recognizer
 {
     CGPoint translation = [recognizer locationInView:self];
     self.origin = [NSValue valueWithCGPoint: translation];
-    [self setNeedsDisplay];
 }
 
 - (void)awakeFromNib 
@@ -159,7 +158,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
     
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
-    for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+1){
+    for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+0.5){
         CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
         CGFloat y = [self.delegate getYwithX:x];	
         CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
