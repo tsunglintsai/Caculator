@@ -9,11 +9,12 @@
 #import "CalculatorGraphicView.h"
 #import "AxesDrawer.h"
 
+
 @interface CalculatorGraphicView()
 @property(nonatomic,strong) AxesDrawer *axesDrawer;
 @property(nonatomic) CGFloat previousScale;
 @property(nonatomic,strong) NSUserDefaults *userDefaults;
-
+@property(nonatomic) dispatch_queue_t serialQueue;
 @end
 
 @implementation CalculatorGraphicView
@@ -23,6 +24,7 @@
 @synthesize origin = _origin;
 @synthesize delegate = _delegate;
 @synthesize userDefaults = _userDefaults;
+@synthesize serialQueue = _serialQueue;
 
 NSString * const UserDefaultKeyStringScale = @"SCALE";
 NSString * const UserDefaultKeyStringOriginX = @"ORIGIN.X";
@@ -39,7 +41,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 
 - (void)setup 
 { 
-    
+    self.serialQueue =  dispatch_queue_create("com.pyrogusto.serial", 0); 
 }
 
 - (NSUserDefaults*) userDefaults{
@@ -96,9 +98,15 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         (recognizer.state == UIGestureRecognizerStateEnded)) 
     {
         CGPoint translation = [recognizer translationInView:self];
-        self.origin = [NSValue valueWithCGPoint: CGPointMake(self.origin.CGPointValue.x+translation.x, self.origin.CGPointValue.y+translation.y)];
-        [recognizer setTranslation:CGPointZero inView:self];
-
+        //NSLog(@"%g,%g",translation.x,translation.y);
+        float threadHoldValue = 0;
+        if(performanceOptimizatiOn){
+            threadHoldValue = 4;
+        }
+        if(abs(translation.x)>threadHoldValue || abs(translation.y) >threadHoldValue){
+            self.origin = [NSValue valueWithCGPoint: CGPointMake(self.origin.CGPointValue.x+translation.x, self.origin.CGPointValue.y+translation.y)];
+            [recognizer setTranslation:CGPointZero inView:self];
+        }
     }
 }
 
@@ -152,22 +160,41 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
     UIGraphicsPopContext();    
 }
 
+
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
-    
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
     for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+0.5){
         CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
         CGFloat y = [self.delegate getYwithX:x];	
         CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
         [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
-    }     
-    [self drawPath:context withPoints:pointList];
-    
+    }    
+    [self drawPath:context withPoints:pointList];    
 }
-
-
+/*
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
+    NSMutableArray *pointList = [[NSMutableArray alloc]init];    
+    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0); 
+    dispatch_apply(self.bounds.size.width, concurrentQueue,  ^(size_t i){
+        CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
+        CGFloat y = [self.delegate getYwithX:x];	
+        CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
+        // dictionary isn't thread using another serail queue to prevent concurrent access
+        dispatch_async(self.serialQueue, ^{
+            // Critical section
+            [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
+        });
+    });
+    dispatch_sync(self.serialQueue, ^{}); // wait all task in serial queue to be done4
+    //dispatch_release(serialQueue);
+    [self drawPath:context withPoints:pointList];    
+}
+*/
 
 @end

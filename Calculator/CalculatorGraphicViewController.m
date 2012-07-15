@@ -7,6 +7,7 @@
 //
 
 #import "CalculatorGraphicViewController.h"
+#import "CalculatorGraphicView.h"
 
 @interface CalculatorGraphicViewController ()<CalculatorGraphicViewDelegate>
 @property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
@@ -54,14 +55,19 @@
 
 - (CGFloat) getYwithX:(CGFloat)x
 {
+    
     CGFloat result = 0;
-    NSString *xString = [NSString stringWithFormat:@"%g",x];
-    if([self.graphic objectForKey:xString]==nil){
-        NSNumber *y = [NSNumber numberWithFloat:[self.delegate getYwithX:x]];
-        [self.graphic setValue:y forKey:xString];
-    }
-    if([[self.graphic objectForKey:xString] isKindOfClass:[NSNumber class]]){
-        result = ((NSNumber*)[self.graphic objectForKey:xString]).floatValue;
+    if(performanceOptimizatiOn){
+        NSString *xString = [NSString stringWithFormat:@"%g",x];
+        if([self.graphic objectForKey:xString]==nil){
+            NSNumber *y = [NSNumber numberWithFloat:[self.delegate getYwithX:x]];
+            [self.graphic setValue:y forKey:xString];
+        }
+        if([[self.graphic objectForKey:xString] isKindOfClass:[NSNumber class]]){
+            result = ((NSNumber*)[self.graphic objectForKey:xString]).floatValue;
+        }
+    }else{
+        result = [self.delegate getYwithX:x];
     }
     return result;
 }

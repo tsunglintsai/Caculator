@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SplitViewBarButtonItemPresenter.h"
 
+#define performanceOptimizatiOn YES
+
 @protocol CalculatorGraphicViewDelegate<SplitViewBarButtonItemPresenter>
 - (CGFloat) getYwithX:(CGFloat)x;
 @end
