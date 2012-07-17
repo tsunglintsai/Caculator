@@ -140,6 +140,7 @@
 {
     [super awakeFromNib];
     self.splitViewController.delegate = self;
+    self.splitViewController.presentsWithGesture = NO;
 }
 
 - (id <SplitViewBarButtonItemPresenter>)splitViewBarButtonItemPresenter
@@ -194,6 +195,10 @@
 #pragma mark - ┃ SplitView              }  ┃
 #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait) || (self.splitViewBarButtonItemPresenter != nil);
+}
 
 - (void)viewDidUnload {
     [self setThingsSendToBrainLabel:nil];
