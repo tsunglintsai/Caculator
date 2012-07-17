@@ -23,7 +23,7 @@
 @synthesize axesDrawer = _axesDrawer;
 @synthesize previousScale = _previousScale;
 @synthesize origin = _origin;
-@synthesize delegate = _delegate;
+@synthesize datasource = _delegate;
 @synthesize userDefaults = _userDefaults;
 @synthesize serialQueue = _serialQueue;
 @synthesize queue = _queue;
@@ -174,7 +174,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
     for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+1/self.contentScaleFactor){
         CGFloat x= (i - self.origin.CGPointValue.x)/self.scale.floatValue;
-        CGFloat y = [self.delegate getYwithX:x];	
+        CGFloat y = [self.datasource getYwithX:x];	
         CGPoint coordinatePostion = CGPointMake(i,self.origin.CGPointValue.y-y*self.scale.floatValue);
         [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
     }

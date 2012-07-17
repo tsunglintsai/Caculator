@@ -11,12 +11,12 @@
 
 #define performanceOptimizatiOn YES
 
-@protocol CalculatorGraphicViewDelegate<SplitViewBarButtonItemPresenter>
+@protocol CalculatorGraphicViewDataSource<SplitViewBarButtonItemPresenter>
 - (CGFloat) getYwithX:(CGFloat)x;
 @end
 
 @interface CalculatorGraphicView : UIView
-@property (weak,nonatomic) id<CalculatorGraphicViewDelegate> delegate;  
+@property (weak,nonatomic) id<CalculatorGraphicViewDataSource> datasource;  
 @property(nonatomic) NSValue *origin;
 @property(nonatomic) NSNumber *scale;
 

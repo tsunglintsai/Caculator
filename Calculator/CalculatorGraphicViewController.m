@@ -9,7 +9,7 @@
 #import "CalculatorGraphicViewController.h"
 #import "CalculatorGraphicView.h"
 
-@interface CalculatorGraphicViewController ()<CalculatorGraphicViewDelegate>
+@interface CalculatorGraphicViewController ()<CalculatorGraphicViewDataSource>
 @property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
 @property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
 @property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
@@ -95,7 +95,7 @@
     #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
     #pragma mark - ┃ Gesture Recognizer     {  ┃
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
-    self.calculatorGraphicView.delegate = self;
+    self.calculatorGraphicView.datasource = self;
     self.programDescriptionLabel.text = self.programString;
     self.calculatorGraphicView.contentMode = UIViewContentModeRedraw; // make sure content redraw when orientation change, or it would just scale to new size
 }
