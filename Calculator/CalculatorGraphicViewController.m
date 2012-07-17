@@ -75,7 +75,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.calculatorGraphicView.contentScaleFactor = 2;
     #pragma mark - ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━╮
     #pragma mark - ┃ Gesture Recognizer     {  ┃
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
