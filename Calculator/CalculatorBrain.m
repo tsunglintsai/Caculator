@@ -8,7 +8,10 @@
 
 @implementation CalculatorBrain
 
+static NSSet *_operationStringSet;
+
 @synthesize programStack = _programStack;
+
 
 - (NSMutableArray *)programStack
 {
@@ -25,16 +28,24 @@
     return [self.programStack copy];
 }
 
++(NSSet*) operationStringSet
+{
+    if (_operationStringSet == nil)
+    {
+        _operationStringSet = [NSSet setWithObjects:@"+",@"-",@"*",@"/",@"π",@"sin",@"cos",@"sqrt", nil];         
+    }
+    return _operationStringSet;
+}
+
 + (BOOL)isOpertion:(id)token{
     BOOL result = false;
-    NSSet *operationList = [NSSet setWithObjects:@"+",@"-",@"*",@"/",@"π",@"sin",@"cos",@"sqrt", nil]; 
     if ([token isKindOfClass:[NSNumber class]])
     {
         result = false;
     }
     else if ([token isKindOfClass:[NSString class]])
     {
-        if([operationList containsObject:token]){
+        if([[CalculatorBrain operationStringSet] containsObject:token]){
             result = true;
         }
     }
