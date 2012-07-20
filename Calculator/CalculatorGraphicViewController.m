@@ -14,6 +14,7 @@
 @property (weak,nonatomic) IBOutlet CalculatorGraphicView *calculatorGraphicView;
 @property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
+@property (weak, nonatomic) IBOutlet UILabel *drawModeString;
 
 @end
 
@@ -23,6 +24,7 @@
 @synthesize delegate = _delegate;
 @synthesize programDescriptionLabel = _programDescriptionLabel;
 @synthesize toolBar = _toolBar;
+@synthesize drawModeString = _drawModeString;
 @synthesize programString = _programString;
 @synthesize splitViewBarButtonItem = _splitViewBarButtonItem;
 
@@ -40,7 +42,7 @@
 - (void) setProgramString:(NSString *)programString
 {
     _programString = programString;
-    self.programDescriptionLabel.text = _programString;
+    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", _programString];
     [self.graphic removeAllObjects];
     [self.calculatorGraphicView setNeedsDisplay];
 }
@@ -55,7 +57,6 @@
 
 - (CGFloat) getYwithX:(CGFloat)x
 {
-    
     CGFloat result = 0;
     if(performanceOptimizatiOn){
         NSString *xString = [NSString stringWithFormat:@"%g",x];
@@ -96,8 +97,21 @@
     #pragma mark - ┃ Gesture Recognizer     {  ┃
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.datasource = self;
-    self.programDescriptionLabel.text = self.programString;
+    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", self.programString];
     self.calculatorGraphicView.contentMode = UIViewContentModeRedraw; // make sure content redraw when orientation change, or it would just scale to new size
+}
+
+- (IBAction)setDrawModeButtonClicked:(UIButton*)sender {
+    if([sender.currentTitle isEqualToString:@"1"]){
+        self.calculatorGraphicView.drawMode = 1;
+        self.drawModeString.text = @"1"; 
+    }else if([sender.currentTitle isEqualToString:@"2"]){
+        self.calculatorGraphicView.drawMode = 2;
+        self.drawModeString.text = @"2"; 
+    }else if([sender.currentTitle isEqualToString:@"3"]){
+        self.calculatorGraphicView.drawMode = 3;
+        self.drawModeString.text = @"3"; 
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -109,6 +123,7 @@
 {
     [self setProgramDescriptionLabel:nil];
     [self setToolBar:nil];
+    [self setDrawModeString:nil];
     [super viewDidUnload];
 }
 @end

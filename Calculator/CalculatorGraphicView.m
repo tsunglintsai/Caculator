@@ -27,6 +27,7 @@
 @synthesize userDefaults = _userDefaults;
 @synthesize serialQueue = _serialQueue;
 @synthesize queue = _queue;
+@synthesize drawMode = _drawMode;
 
 NSString * const UserDefaultKeyStringScale = @"SCALE";
 NSString * const UserDefaultKeyStringOriginX = @"ORIGIN.X";
@@ -49,6 +50,16 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 - (void)setup 
 { 
     self.serialQueue =  dispatch_queue_create("com.pyrogusto.serial", 0); 
+}
+
+- (UIImageView*)imageView{
+    UIImageView* result;
+    for (id object in self.subviews) {
+        if([object isKindOfClass:[UIImageView class]]){
+            result = object;
+        }
+    }
+    return result;
 }
 
 - (NSUserDefaults*) userDefaults{
@@ -113,6 +124,7 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         if(abs(translation.x)>threadHoldValue || abs(translation.y) >threadHoldValue){
             self.origin = [NSValue valueWithCGPoint: CGPointMake(self.origin.CGPointValue.x+translation.x, self.origin.CGPointValue.y+translation.y)];
             [recognizer setTranslation:CGPointZero inView:self];
+            self.imageView.center = CGPointMake( self.imageView.center.x +translation.x, self.imageView.center.y +translation.y);
         }
     }
 }
@@ -168,8 +180,8 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
 }
 
 
-- (void)drawRect:(CGRect)rect
-{
+
+- (void)draw1{
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];    
     NSMutableArray *pointList = [[NSMutableArray alloc]init];
     for(CGFloat  i= 0; i < self.bounds.size.width ; i=i+1/self.contentScaleFactor){
@@ -179,27 +191,26 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
     }
     CGContextRef context = UIGraphicsGetCurrentContext();    
-    [self drawPath:context withPoints:pointList];    
+    [self drawPath:context withPoints:pointList];        
 }
 
-/*
-- (void)drawRect:(CGRect)rect
-{
+- (void)draw2{
     CGSize boundSize = self.bounds.size;
     CGPoint orgin = self.origin.CGPointValue;
     CGFloat scale = self.scale.floatValue;
+    CGFloat scaleFactor = self.contentScaleFactor;
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];                          
-    
     [self.queue cancelAllOperations];
     [self.queue addOperationWithBlock:^{
         NSMutableArray *pointList = [[NSMutableArray alloc]init];
-        for(CGFloat  i= 0; i < boundSize.width ; i=i+0.5){
+        for(CGFloat  i= 0; i < boundSize.width ; i=i+1/scaleFactor){
             CGFloat x= (i - orgin.x)/scale;
-            CGFloat y = [self.delegate getYwithX:x];	
+            CGFloat y = [self.datasource getYwithX:x];	
             CGPoint coordinatePostion = CGPointMake(i,orgin.y-y*scale);
             [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
         }
-        UIGraphicsBeginImageContext(boundSize);
+        //UIGraphicsBeginImageContext(boundSize);
+        UIGraphicsBeginImageContextWithOptions(boundSize, 0, 0.0);
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextBeginPath(ctx);
         [pointList enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
@@ -219,39 +230,53 @@ NSString * const UserDefaultKeyStringOriginY = @"ORIGIN.Y";
         UIGraphicsEndImageContext();       
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            UIImageView *imageView;
-            if([[self.subviews lastObject] isKindOfClass:[UIImageView class]]){
-                imageView = [self.subviews lastObject];
-            }
-            imageView.image = image;
+            self.imageView.image = nil;
+            self.imageView.center = CGPointMake(self.imageView.bounds.size.width/2,self.imageView.bounds.size.height/2);
+            self.imageView.image = image;
         });
     }];
 }
-*/
-/*
-- (void)drawRect:(CGRect)rect
-{
+-(void)draw3{
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[self.axesDrawer class]drawAxesInRect:self.bounds originAtPoint:self.origin.CGPointValue scale:self.scale.floatValue];
-    NSMutableArray *pointList = [[NSMutableArray alloc]init];    
+    NSMutableArray *pointList = [[NSMutableArray alloc]initWithCapacity:self.bounds.size.width];    
     dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0); 
     CGPoint originStruct = CGPointMake(self.origin.CGPointValue.x, self.origin.CGPointValue.y);
     CGFloat scale = self.scale.floatValue;
-    self.serialQueue =  dispatch_queue_create("com.pyrogusto.serial", 0);     
+    for(int i = 0 ; i < self.bounds.size.width; i++){
+        [pointList addObject:[NSValue valueWithCGPoint: CGPointMake(0,0)]];
+    }
     dispatch_apply(self.bounds.size.width, concurrentQueue,  ^(size_t i){
         CGFloat x= (i - originStruct.x)/scale;
-        CGFloat y = [self.delegate getYwithX:x];	
+        CGFloat y = [self.datasource getYwithX:x];	
         CGPoint coordinatePostion = CGPointMake(i,originStruct.y-y*scale);
         // dictionary isn't thread using another serail queue to prevent concurrent access
         dispatch_async(self.serialQueue, ^{
             // Critical section
-            [pointList addObject:[NSValue valueWithCGPoint: coordinatePostion]];
+            int index = (int)i;
+            [pointList replaceObjectAtIndex:index withObject:[NSValue valueWithCGPoint: coordinatePostion]];
         });
     });
     dispatch_sync(self.serialQueue, ^{}); // wait all task in serial queue to be done4
-    dispatch_release(self.serialQueue);
-    [self drawPath:context withPoints:pointList];    
+    [self drawPath:context withPoints:pointList];        
 }
-*/
+
+
+
+- (void)drawRect:(CGRect)rect
+{
+    
+    if(self.drawMode==2){
+        [self draw2];
+    }else if(self.drawMode==3){
+        [self draw3];
+        self.imageView.image = nil;
+    }else{
+        [self draw1];        
+        self.imageView.image = nil;
+    }
+    
+}
+
 
 @end

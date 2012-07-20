@@ -19,5 +19,6 @@
 @property (weak,nonatomic) id<CalculatorGraphicViewDataSource> datasource;  
 @property(nonatomic) NSValue *origin;
 @property(nonatomic) NSNumber *scale;
+@property(nonatomic) int drawMode;
 
 @end
