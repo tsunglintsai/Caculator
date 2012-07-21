@@ -8,6 +8,7 @@
 
 #import "CalculatorGraphicViewController.h"
 #import "CalculatorGraphicView.h"
+#import "CalculatorBrain.h"
 
 @interface CalculatorGraphicViewController ()<CalculatorGraphicViewDataSource>
 @property (strong, nonatomic) NSMutableDictionary *graphic; // my model.
@@ -15,18 +16,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *programDescriptionLabel;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
 @property (weak, nonatomic) IBOutlet UILabel *drawModeString;
-
 @end
 
 @implementation CalculatorGraphicViewController
 @synthesize calculatorGraphicView = _calculatorGraphicView;
 @synthesize graphic = _graphic;
-@synthesize delegate = _delegate;
 @synthesize programDescriptionLabel = _programDescriptionLabel;
 @synthesize toolBar = _toolBar;
 @synthesize drawModeString = _drawModeString;
-@synthesize programString = _programString;
 @synthesize splitViewBarButtonItem = _splitViewBarButtonItem;
+@synthesize program = _program;
 
 - (void)setSplitViewBarButtonItem:(UIBarButtonItem *)splitViewBarButtonItem
 {
@@ -39,12 +38,10 @@
     }
 }
 
-- (void) setProgramString:(NSString *)programString
-{
-    _programString = programString;
-    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", _programString];
-    [self.graphic removeAllObjects];
+- (void)setProgram:(id)program{
+    _program = program;
     [self.calculatorGraphicView setNeedsDisplay];
+    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", [CalculatorBrain descriptionOfProgram:self.program]];    
 }
 
 - (NSDictionary*) graphic
@@ -61,14 +58,16 @@
     if(performanceOptimizatiOn){
         NSString *xString = [NSString stringWithFormat:@"%g",x];
         if([self.graphic objectForKey:xString]==nil){
-            NSNumber *y = [NSNumber numberWithFloat:[self.delegate getYwithX:x]];
+            NSDictionary *variableMappings = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:x] forKey:@"x"];
+            NSNumber *y = [NSNumber numberWithFloat:[CalculatorBrain runProgram:self.program usingVariableValues:variableMappings]];
             [self.graphic setValue:y forKey:xString];
         }
         if([[self.graphic objectForKey:xString] isKindOfClass:[NSNumber class]]){
             result = ((NSNumber*)[self.graphic objectForKey:xString]).floatValue;
         }
     }else{
-        result = [self.delegate getYwithX:x];
+        NSDictionary *variableMappings = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:x] forKey:@"x"];
+        result = [CalculatorBrain runProgram:self.program usingVariableValues:variableMappings];
     }
     return result;
 }
@@ -97,7 +96,7 @@
     #pragma mark - ┃ Gesture Recognizer     {  ┃
     #pragma mark - ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━╯
     self.calculatorGraphicView.datasource = self;
-    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", self.programString];
+    self.programDescriptionLabel.text = [NSString stringWithFormat:@"y=%@", [CalculatorBrain descriptionOfProgram:self.program]];
     self.calculatorGraphicView.contentMode = UIViewContentModeRedraw; // make sure content redraw when orientation change, or it would just scale to new size
 }
 

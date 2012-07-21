@@ -7,16 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CalculatorBrain.h"
 #import "CalculatorGraphicView.h"
-
-@protocol CalculatorGraphicViewDelegateDelegate
-- (CGFloat) getYwithX:(CGFloat)x;
-@end
 
 @interface CalculatorGraphicViewController : UIViewController
 
-@property (strong, nonatomic) NSString *programString;
-@property (weak,nonatomic) id<CalculatorGraphicViewDelegateDelegate> delegate;
+@property (strong, nonatomic) id program;
 
 @end

@@ -10,7 +10,7 @@
 #import "CalculatorBrain.h"
 #import "CalculatorGraphicViewController.h"
 
-@interface CalculatorViewController ()<CalculatorGraphicViewDelegateDelegate,UISplitViewControllerDelegate>
+@interface CalculatorViewController ()<UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *thingsSendToBrainLabel;
 @property (weak, nonatomic) IBOutlet UILabel *display;
 @property (nonatomic) BOOL userIsIntTheMiddleOfEnteringANumber;
@@ -121,9 +121,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"graphicView4Segues"]) {
         CalculatorGraphicViewController *graphicViewController = segue.destinationViewController;
-        graphicViewController.delegate = self;
-        graphicViewController.programString = [CalculatorBrain descriptionOfProgram:self.brain.program];
-        NSLog(@"%@",graphicViewController.programString);
+        graphicViewController.program = self.brain.program;
     }
 }
 
@@ -184,8 +182,7 @@
 }
 
 - (void)showAndSetGraphic{
-    self.calculatorGraphicViewController.programString = [CalculatorBrain descriptionOfProgram:self.brain.program];
-    self.calculatorGraphicViewController.delegate = self;
+    self.calculatorGraphicViewController.program = self.brain.program;
 }
 
 - (IBAction)updateGraphic:(id)sender {
