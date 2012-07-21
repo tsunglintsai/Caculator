@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SplitViewBarButtonItemPresenter.h"
 
-#define performanceOptimizatiOn NO
+#define performanceOptimizatiOn YES
 
 @protocol CalculatorGraphicViewDataSource<SplitViewBarButtonItemPresenter>
 - (CGFloat) getYwithX:(CGFloat)x;
